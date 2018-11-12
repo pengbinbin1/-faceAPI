@@ -16,7 +16,7 @@ service XgfaceAPIService{
 
   rpc AddFace(AddFaceReq) returns (AddFaceResp){} //添加人脸
   rpc Scan(Image) returns(ScanResp){} //在库中找最相似人脸
-  rpc ListFace(ListFaceReq)returns(ListFaceResp){} //列举人脸
+  rpc ListFace(ListFaceReq)returns(ListFaceResp){} //列举人脸接口
   rpc ScanEx(Image) returns(ScanRespEx){}    //M:N
   rpc DelFace(DelFaceReq)returns(DelFaceResp){}  //删除人脸
   rpc DelUser(DelUserReq)returns(DelUserResp){}  //删除用户
