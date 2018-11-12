@@ -1,0 +1,37 @@
+type: google.api.Service
+config_version: 3
+
+http:
+    rules:
+       - selector: xgfaceAPI.XgfaceAPIService.GetDetectInfo
+         post: /v1/Detect
+         body: '*'
+       - selector: xgfaceAPI.XgfaceAPIService.MatchFacesEx
+         post: /v1/Match
+         body: '*'
+       - selector: xgfaceAPI.XgfaceAPIService.AddFace
+         post: /v1/AddFace
+         body: '*'
+       - selector: xgfaceAPI.XgfaceAPIService.Scan
+         post: /v1/Scan
+         body: '*'
+       - selector: xgfaceAPI.XgfaceAPIService.ScanEx
+         post: /v1/ScanEx
+         body: '*'
+       - selector: xgfaceAPI.XgfaceAPIService.ListFace
+         post: /v1/ListFace
+         body: '*'
+       - selector: xgfaceAPI.XgfaceAPIService.DelFace
+         post: /v1/DelFace
+         body: '*'
+       - selector: xgfaceAPI.XgfaceAPIService.ListUser
+         get: /v1/ListUser
+       - selector: xgfaceAPI.XgfaceAPIService.DelUser
+         post: /v1/DelUser
+         body: '*'
+       - selector: xgfaceAPI.XgfaceAPIService.GetUserInfo
+         post: /v1/GetUserInfo
+         body: '*'
+       - selector: xgfaceAPI.XgfaceAPIService.UpdateFace
+         post: /v1/UpdateFace
+         body: '*'		

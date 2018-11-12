@@ -1,0 +1,229 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.xgrobotics.xgfaceAPI";
+option java_outer_classname = "XgfaceAPIProto";
+option objc_class_prefix = "XGF";
+
+package xgfaceAPI;
+
+// Interface exported by the server.
+service XgfaceAPIService{
+
+  rpc GetDetectInfo(DetectReq) returns (DetectResp) {} //人脸检测接口
+  rpc MatchFaces(Images) returns (ScoreResp){} //人脸比对接口
+  rpc MatchFacesEx(Images) returns (ScoreResp){} //人脸比对接口，比对在faceAPI中完成
+
+  rpc AddFace(AddFaceReq) returns (AddFaceResp){} //添加人脸
+  rpc Scan(Image) returns(ScanResp){} //在库中找最相似人脸
+  rpc ListFace(ListFaceReq)returns(ListFaceResp){} //列举人脸
+  rpc ScanEx(Image) returns(ScanRespEx){}    //M:N
+  rpc DelFace(DelFaceReq)returns(DelFaceResp){}  //删除人脸
+  rpc DelUser(DelUserReq)returns(DelUserResp){}  //删除用户
+  rpc ListUser(Empty) returns(ListUserResp){} //列举用户，get	
+  rpc GetUserInfo(GetUserInfoReq) returns(GetUserInfoResp){} //获取指定用户的信息
+  rpc UpdateFace(AddFaceReq) returns(AddFaceResp){} //更新用户下的人脸，参数与添加人脸相同
+}
+
+message Empty{
+	
+}
+
+
+
+message Images{
+    string  image1 = 1;
+    string  image2 =2;
+}
+
+
+message FaceField{
+	int32 landmark = 1;
+	int32 attributes = 2;
+	int32 quality = 3;
+	int32 feature =4;
+}
+
+message DetectReq {
+  FaceField facefield = 1;
+  repeated string images = 2;
+}
+
+message Point {
+  float coordinate_x = 1;
+  float coordinate_y = 2;
+}
+message Rect {
+  float width = 1;
+  float height = 2;
+}
+
+message Feature {
+  repeated float values = 1;
+}
+message Features {
+  repeated Feature features = 1;
+}
+
+message Box {
+  Point center = 1;
+  Rect  rect = 2;
+  float score = 3;
+}
+message Boxs{
+  repeated Box boxs = 1;
+}
+
+message Landmark {
+  repeated Point points = 1;
+  float score = 2;
+}
+message Landmarks {
+  repeated Landmark landmarks = 1;
+}
+message Body {
+  Box box = 1;
+}
+message BodyInfo {
+  repeated Body bodys = 1;
+}
+
+message Face{
+    Box box = 1;
+    Landmark landmark = 2;
+    Feature feature = 3;
+	  map<string,int32> attributes = 4;	
+    float pitch = 5;
+    float yaw = 6;
+    float roll = 7;
+    float global_is_face = 8;
+    float global_front_face = 9;
+    float local_is_face = 10;
+	string faceToken = 11;
+}
+
+message DetectInfo {
+	int32 faceNum = 1;
+  	repeated Face faces = 2;
+}
+
+//人脸检测返回值
+message DetectResp{
+	int32 errCode =1 ;
+	string errMsg =2;
+	DetectInfo detectInfo = 3;
+}
+
+//人脸比对
+message Image{
+	string data =1;
+}
+
+message ScoreResp{
+	int32 errCode =1;
+	string errMsg =2;
+	float score =3;
+}
+
+//以下为注册人脸专用信息
+message AddFaceReq{
+	string data =1;
+	string userID =2;
+	string userInfo =3;
+}
+message AddFaceResp{
+	int32 errCode =1;
+	string errMsg =2;
+	Box  location =3;
+	string faceToken =4;
+	string imgToken = 5;
+}
+
+
+//以下为1：N专用
+message ScanResp{
+	int32 errCode =1;
+	string errMsg =2;
+	float score = 3; //最像人脸的比分
+	string imgToken = 4; //图像唯一标识
+	string faceToken =5;// facetoken 
+	string userID = 6; // 用户ID
+	string userInfo = 7;// 注册时的写入的用户信息
+}
+
+
+//以下信息为M:N接口专用
+message ScanFace {
+	string faceToken =1; //人脸唯一标识
+	float score = 2; //比分
+	string imgToken = 3; //图像唯一标识
+	string userID = 4; // 用户ID
+	string userInfo = 5;// 注册时的写入的用户信息
+	Box    location = 6;//人脸位置
+}
+message Result{
+	int32 faceNum = 1;
+	repeated ScanFace faceList =2;
+}
+
+message ScanRespEx{
+	int32 errCode =1 ;
+	string errMsg = 2;
+	Result scanResult =3;
+}
+
+//以下信息为获取人脸列表专用
+message ListFaceReq{
+	string userID = 1;
+}
+message SingleRecord{
+	int64 createTime = 1;
+	int64 updateTime = 2;
+	string imgToken  = 3;
+	string faceToken =4 ;
+}
+
+message ListFaceResp{
+	int32 errCode = 1;
+	string errMsg =2 ;
+	repeated SingleRecord faceRecord = 3;
+}
+
+//以下信息为删除人脸专用
+message DelFaceReq{
+	string faceToken = 1;
+	string userID = 2;
+}
+
+message DelFaceResp{
+	int32 errCode = 1;
+	string errMsg = 2;
+}
+
+//查询用户信息
+message GetUserInfoReq{
+	string userID = 1;
+}
+
+message GetUserInfoResp{
+	int32 errCode = 1;
+	string errMsg =2;
+	repeated string userInfo = 3;
+}
+
+//删除用户
+message DelUserReq{
+	string userID = 1;
+}
+
+message DelUserResp{
+	int32 errCode = 1;
+	string errMsg =2;
+}
+
+//列举用户
+message ListUserResp{
+	int32 errCode = 1;
+	string errMsg =2;
+	repeated string userList = 3;
+}

@@ -1,0 +1,53 @@
+version: "2"
+services:
+  web:
+    port: 10000
+    nsqdtcpaddr: 10.58.122.238:4150
+    xgfaceaddr: localhost:50000
+    xgindexaddr: 10.58.122.238:50001
+    deadline: 5
+    baseip: localhost
+  image:
+#    imgbasepath: ./
+    imgbasepath: /home/user/image
+    accessbasepath: /cameraimages
+    faceimgpath: /camera/face/
+    errimgpath: /camera/err/
+    mainimgpath: /camera/original/
+    facefilepath: /camera/facefile/
+    peopleimgpath: /staff/
+#    peopleimgpath: ./
+  mysql:
+    user: root
+    password: "123456"
+    host: 10.58.122.238:3306
+    database: xgface
+  redis:
+    user: root
+    password: ""
+    host: 10.58.122.238:6379
+  facialSensitivity:
+    slack: #宽松
+      pitch: 30
+      yaw: 30
+      roll: 30
+      globalIsFace: 0.6
+      globalFrontFace: 0.6
+      localIsFace: 0.6
+      boxScore: 0.6
+    general:
+      pitch: 30
+      yaw: 30
+      roll: 30
+      globalIsFace: 0.6
+      globalFrontFace: 0.6
+      localIsFace: 0.6
+      boxScore: 0.6
+    strict: #严格
+      pitch: 30
+      yaw: 30
+      roll: 30
+      globalIsFace: 0.6
+      globalFrontFace: 0.6
+      localIsFace: 0.6
+      boxScore: 0.6

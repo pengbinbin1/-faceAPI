@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+//option java_multiple_files = true;
+//option java_package = "com.xgrobotics.xgface";
+//option java_outer_classname = "IndexService";
+//option objc_class_prefix = "XGF";
+
+package xgindex;
+
+// Interface exported by the server.
+service IndexService{
+  // index RPC service
+  //
+  rpc BuildbyPoints(BuildRequest) returns (BuildResponse){}
+
+  rpc BuildbyClusters(IndexMap) returns (Error){}
+
+  rpc Find(Feature) returns (Cluster){}
+
+  rpc InsertPoint(Feature) returns (Cluster){}
+
+  rpc InsertCluster(Feature) returns (Cluster){}
+
+  rpc UpdateCluster(Cluster) returns (Error){}
+
+  rpc DeletebyCId(Cluster) returns (Error){}
+
+  rpc GetKdClusterCount(Request) returns (KDClusterCount) {}
+
+  rpc FindWithThreshhold(Request) returns (Response) {}
+
+  rpc FindKnn(KnnRequest) returns (Response) {}
+
+  rpc InsertIndexPoint(Feature) returns (Cluster) {}
+}
+message Request{
+  float threshhold = 1;
+  Feature feature = 2;
+}
+message KnnRequest{
+  int32 knn = 1;
+  Feature feature = 2; 
+}
+message Response{
+  repeated int32 cids = 1;
+  repeated float similarity = 2;
+}
+message KDClusterCount{
+  int32 kd_count = 1;
+}
+message BuildRequest{
+  repeated Feature feature  = 1;
+  float threshold = 2;
+}
+message BuildResponse{
+  Error err = 1;
+  IndexMap index_map = 2;
+  repeated Cluster cluster = 3; 
+}
+message Cluster{
+  int32 id = 1;
+  Feature feature = 2;
+}
+message IndexMap{
+  map<int32,Feature> index = 1;
+}
+message Feature {
+  repeated float value = 1;
+}
+message Features{
+  repeated Feature feature  = 1;
+}
+message Error{
+  enum ErrorCode{
+      XG_SUCCESS  =0;
+      XG_FAILED = -1;
+      XG_OVERLIMMITED = -2;
+      XG_INVALID_PARA = -3;
+      XG_KD_FAILED = -4;
+      XG_KD_INSERT_FAILED = -7;
+      XG_NOT_FOUND = -6;
+  }
+  ErrorCode err_code = 1;
+  string err_info  = 2;
+}
