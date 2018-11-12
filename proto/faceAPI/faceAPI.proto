@@ -10,7 +10,7 @@ package xgfaceAPI;
 // Interface exported by the server.
 service XgfaceAPIService{
 
-  rpc GetDetectInfo(DetectReq) returns (DetectResp) {} //人脸检测接口
+  rpc GetDetectInfo(DetectReq) returns (DetectResp) {} //人脸检测专有接口接口
   rpc MatchFaces(Images) returns (ScoreResp){} //人脸比对接口
   rpc MatchFacesEx(Images) returns (ScoreResp){} //人脸比对接口，比对在faceAPI中完成
 
